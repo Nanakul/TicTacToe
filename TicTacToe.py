@@ -66,42 +66,47 @@ def game_ready(readycheck=False):
             readycheck = True
             print('\nGood luck players! \nMATCH START!\n')
             reset_board()
-            p1_start()
+            p1_turn()
             break
 
 #Take turns function
-def turn_helper(player_choice:str, symbol:str) -> None:
+def turn_helper(symbol:str) -> None:
     global counter
-    if player_choice in placements and player_choice == '1':
-        row10[1] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '2':
-        row10[5] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '3':
-        row10[9] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '4':
-        row6[1] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '5':
-        row6[5] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '6':
-        row6[9] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '7':
-        row2[1] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '8':
-        row2[5] = symbol
-        current_board()
-    elif player_choice in placements and player_choice == '9':
-        row2[9] = symbol
-        current_board()
-    else:
-        pass
-    alter_placement(player_choice, symbol)
+    move = True
+    while move:
+        inpt = input(f'\nPlayer 1 -- Where would you like to place your {symbol}? (1-9)\n')
+        match inpt:
+            case '1':
+                row10[1] = symbol
+                move = False
+            case '2':
+                row10[5] = symbol
+                move = False
+            case '3':
+                row10[9] = symbol
+                move = False
+            case '4':
+                row6[1] = symbol
+                move = False
+            case '5':
+                row6[5] = symbol
+                move = False
+            case '6':
+                row6[9] = symbol
+                move = False
+            case '7':
+                row2[1] = symbol
+                move = False
+            case '8':
+                row2[5] = symbol
+                move = False
+            case '9':
+                row2[9] = symbol
+                move = False
+            case _:
+                print('Invalid placement. Please re-enter valid option.')
+    current_board()
+    alter_placement(inpt, symbol)
     counter += 1
 
 
@@ -113,46 +118,17 @@ def alter_placement(player_choice:str, symbol:str) -> None:
     #change index number of new int player choice and replaces corresponding value in list with player symbol
     placements[player_choice_int] = symbol
 
-def p1_start():
-    global p1sym
-    firstmove = False
-    while firstmove == False:
-        p1firstmove = input(f'\nPlayer 1 -- Where would you like to place your {p1sym[0]}? (1-9)\n')
-        if p1firstmove not in placements:
-            print('Invalid placement')
-        else:
-            break
-
-    turn_helper(p1firstmove, p1sym[0])
+def p1_turn():
+    if check_win(board,['X','O']) == True:
+        return None
+    turn_helper(p1sym[0])
     p2_turn()
 
 def p2_turn():
-    secondmove = False
     if check_win(board,['X','O']) == True:
         return None
-    while secondmove == False:
-        p2move = input(f'\nPlayer 2 -- Where would you like to place your {p2sym[0]}? (1-9)\n')
-        if p2move not in placements:
-            print('Invalid placement')
-        else:
-            break
-
-    turn_helper(p2move, p2sym[0])
+    turn_helper(p2sym[0])
     p1_turn()
-
-def p1_turn():
-    thirdmove = False
-    if check_win(board,['X','O']) == True:
-        return None
-    while thirdmove == False:
-        p1move = input(f'\nPlayer 1 -- Where would you like to place your {p1sym[0]}? (1-9)\n')
-        if p1move not in placements:
-            print('Invalid placement')
-        else:
-            break
-
-    turn_helper(p1move, p1sym[0])
-    p2_turn()
 
 #Function to reset board
 def reset_board() -> list:
